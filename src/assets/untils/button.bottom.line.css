@@ -1,0 +1,10 @@
+.button-bottom-line{
+    background: linear-gradient(to right, #eeeeee, #eeeeee) no-repeat bottom center;
+    background-size: 0 2px;
+    transition:  background-size 0.3s;
+    cursor: pointer;
+}
+.button-bottom-line:hover{
+    /* background-position-x: left; */
+    background-size: 100% 2px;
+}
