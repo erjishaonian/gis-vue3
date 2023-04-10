@@ -17,7 +17,6 @@
             </div>
         </div>
     </Transition>
-    
 </template>
 
 <script>
