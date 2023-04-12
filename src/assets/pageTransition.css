@@ -23,7 +23,7 @@
 }
 /* 定义进入动画 */
 .modal-enter-active { 
-    transition: opacity .5s;
+    transition: opacity .3s;
 }
 .modal-enter-from {
     opacity: 0;
@@ -34,4 +34,14 @@
 }
 .modal-leave-to {
     opacity: 0;
+}
+
+
+/* 定义进入动画 */
+.fi-enter-active { 
+    animation: fadeInUp .5s ;
+}
+/* 定义离开动画 */
+.fi-leave-active {
+    animation: fadeOutDown .5s;
 }

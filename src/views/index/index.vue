@@ -1,18 +1,18 @@
 <template>
   <div class="page">
     
-    <div class="index-page">
+    <div class="index-page" title="">
       <video aria-hidden="true" muted class="video" autoplay loop playsinline playbackRate="0.8">
         <source src="@/assets/video/绿色近景.mp4" type="video/mp4">
         Your browser does not support the video tag. 
       </video>
       <div class="container">
-        <div class="span-bottom-line">{{indexTitle}}</div>
+        <div title="title" class="span-bottom-line">{{indexTitle}}</div>
       </div>
       
     </div>
     
-    <main class="main">
+    <main class="main" title="">
       <section class="list-item" v-for="(item, i) in decsList" :key="i">
         <div class="item-image">
           <img class="image" :src="item.img||'https://t7.baidu.com/it/u=3691080281,11347921&fm=193&f=GIF'" alt="image">
@@ -23,6 +23,9 @@
         </div>
       </section>
     </main>
+
+    <!-- 回到顶部 -->
+    <el-backtop :right="100" :bottom="200" />
 
   </div>
 </template>
@@ -179,7 +182,7 @@ export default {
       align-items: center;
       justify-content: center;
       width: 100%;
-      height: 400px;
+      height: 600px;
       overflow: hidden;
       .item-image{
         position: absolute;
@@ -192,7 +195,7 @@ export default {
         .image{
           display: block;
           width: 100%;
-          height: 600px;
+          height: 800px;
           object-fit: cover;
           transform: translateY(-100px);
           filter: brightness(60%) blur(2px);
@@ -217,9 +220,13 @@ export default {
       filter: brightness(90%) blur(0);
     }
     .list-item:hover .item-image{
-      // transform: scale(2);
+      transform: scale(1.03);
 
     }
+  }
+  .el-backtop{
+    background: #000000;
+    color: #fff;
   }
 }
 

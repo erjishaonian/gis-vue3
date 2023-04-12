@@ -20,8 +20,15 @@
       <component :is="Component" :key="route.fullPath" />
     </transition>
   </router-view>
-  <Modal :show="loginShow" @close="loginClose">
-    <div>modal</div>
+  <Modal :show="loginShow" @close="loginClose" :width="600" :onlyContent="true" :borderRadius="20">
+    <div class="modal-main">
+      <div class="title">
+        Login
+      </div>
+      <div class="input">
+        <LineInput/>
+      </div>
+    </div>
   </Modal>
   <!-- <router-view/> -->
 </template>
@@ -31,11 +38,12 @@ import { defineComponent } from 'vue'
 import router from './router/index.js'
 import '@/assets/untils/button.bottom.line.css'
 import Modal from '@/components/Modal.vue'
+import LineInput from '@/components/LineInput.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
-    Modal
+    Modal, LineInput
   },
   data () {
     return {
@@ -78,49 +86,66 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  // font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: '黑体';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
 .top{
-    height: 90px;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    transition: all 0.3s ease;
-    background-color: rgba(0, 0, 0, 0);
-    display: flex;
-    flex-direction: row;
-    z-index: 999;
-    align-items: center;
-    color: #eeeeee;
-    .image{
-      // width: 80px;
-      height: 60px;
-      margin-left: 20px;
-      cursor: pointer;
-    }
-    .title{
-      font-size: 26px;
-      font-weight: bold;
-      padding-left: 20px;
-      cursor: pointer;
-    }
-    .router{
-      font-size: 20px;
-      margin-left: 30px;
-    }
-    .login{
-      font-size: 18px;
-      margin-right: 50px;
-    }
-    .router, .login{
-      height: 32px;
-    }
+  height: 90px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: all 0.3s ease;
+  background-color: rgba(0, 0, 0, 0);
+  display: flex;
+  flex-direction: row;
+  z-index: 999;
+  align-items: center;
+  color: #eeeeee;
+  .image{
+    // width: 80px;
+    height: 60px;
+    margin-left: 20px;
+    cursor: pointer;
   }
+  .title{
+    font-size: 26px;
+    font-weight: bold;
+    padding-left: 20px;
+    cursor: pointer;
+  }
+  .router{
+    font-size: 20px;
+    margin-left: 30px;
+  }
+  .login{
+    font-size: 18px;
+    margin-right: 50px;
+  }
+  .router, .login{
+    height: 32px;
+  }
+}
+.modal-main{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  .title{
+    color: #555;
+    font-size: 44px;
+    font-weight: bolder;
+    margin-bottom: 40px;
+  }
+  .input{
+    width: 60%;
+  }
+}
 nav {
   padding: 30px;
 

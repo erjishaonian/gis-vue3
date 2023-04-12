@@ -11,6 +11,7 @@ import 'animate.css'
 import '@/assets/pageTransition.css'
 import '@/assets/untils/scroll.css'
 import '@/assets/untils/main.css'
+// import '@/assets/untils/color.scss'
 
 import axios from './axios'
 
