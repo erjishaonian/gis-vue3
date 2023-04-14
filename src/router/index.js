@@ -5,7 +5,14 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {
+      // 添加路由元信息
+      topStyle: {
+        color: '#555555',
+        background: '#ffffff'
+      }
+    }
   },
   {
     path: '/about',

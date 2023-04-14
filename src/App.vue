@@ -4,8 +4,8 @@
     <router-link to="/about">About</router-link> |
     <router-link to="/index">Index</router-link>
   </nav> -->
-  <div class="top">
-      <img class="image" src="@/assets/img/logo-white.png" @click="this.$router.push('index')">
+  <div class="top" :style="{color: topStyle.color||'#eeeeee'}">
+      <!-- <img class="image" src="@/assets/img/logo-white.png" @click="this.$router.push('index')"> -->
       <div class="title" @click="this.$router.push('index')">智慧农业</div>
       <div style="flex:0.3"></div>
       <div class="router button-bottom-line">地图展示</div>
@@ -26,8 +26,9 @@
         Login
       </div>
       <div class="input">
-        <LineInput :icon="true"><UserFilled /></LineInput>
-        <LineInput :label="'姓名'"/>
+        <LineInput :icon="true"  :fontSize="20" :placeholder="'账号'" v-model="user.username" ref="username"><User /></LineInput>
+        <LineInput :icon="true"  :fontSize="20" :placeholder="'密码'" v-model="user.password" type="password" ref="password"><Lock /></LineInput>
+        
       </div>
     </div>
   </Modal>
@@ -49,14 +50,32 @@ export default defineComponent({
   data () {
     return {
       transitionName: 'page',
-      loginShow: false
+      loginShow: false,
+      user:{
+        username: '',
+        password: ''
+      },
+      topStyle: {
+        color: null,
+        background: null
+      }
     }
   },
   created () {
     // 监听路由变化，更新transitionName
     router.afterEach((to, from) => {
-      this.transitionName = transitionName
+      // console.log(to)
+      if(to.meta && to.meta.topStyle)
+        this.topStyle = to.meta.topStyle
+      else
+        this.topStyle = {
+          color: '#eeeeee',
+          background: 'rgba(0, 0, 0, 0.8)'
+        }
+      // this.transitionName = transitionName || 'page'
     })
+    // console.log(this.$route)
+    console.log(this.topColor)
   },
   mounted () {
     
@@ -73,11 +92,11 @@ export default defineComponent({
       let top = document.getElementsByClassName('top')[0]
       //置顶
       if(e){
-        top.style.backgroundColor = 'rgba(0, 0, 0, 0)'
+        top.style.backgroundColor ='rgba(0, 0, 0, 0)'
       }
       //未置顶
       else{
-        top.style.backgroundColor = 'rgba(0, 0, 0, 0.8)'
+        top.style.backgroundColor = this.topStyle.background ||  'rgba(0, 0, 0, 0.8)'
       }
     }
   }
@@ -106,7 +125,6 @@ export default defineComponent({
   flex-direction: row;
   z-index: 999;
   align-items: center;
-  color: #eeeeee;
   .image{
     // width: 80px;
     height: 60px;
@@ -145,6 +163,9 @@ export default defineComponent({
   }
   .input{
     width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 }
 nav {

@@ -1,11 +1,11 @@
 <template>
-  <div class="main">
-    <div class="label" v-if="labelShowThis">{{label}}</div>
-    <div class="box" :style="{fontSize: fontSize+'px',animation: boxAnimation}">
-      <div class="empty-label" v-if="(label===null)&&(placeholder&&placeholder!=='')" :style="{height: fontSize*1.2+'px'}"></div>
-      <div class="content">
+  <div class="line-input-main">
+    <div class="line-input-label" v-if="labelShowThis">{{label}}</div>
+    <div class="line-input-box" :style="{fontSize: fontSize+'px',animation: boxAnimation}">
+      <div class="line-input-empty-label" v-if="(label===null)&&(placeholder&&placeholder!=='')" :style="{height: fontSize*1.4+'px'}"></div>
+      <div class="line-input-content">
         
-        <div class="input">
+        <div class="line-input-input">
           <input 
               :placeholder="(label===null)?'':placeholder" 
               @click="click" 
@@ -14,20 +14,21 @@
               @blur="blur"
               :value="value" 
               @input="input"
+              :type="type"
               />
-          <div class="placeholder" v-if="label===null" :style="placeholderStyle">{{placeholder}}</div>
+          <div class="line-input-placeholder" v-if="label===null" :style="placeholderStyle">{{placeholder}}</div>
         </div>
-        <div class="icon" v-if="icon">
+        <div class="line-input-icon" v-if="icon">
           <slot/>
         </div>
       </div>
-      <div class="line">
+      <div class="line-input-line">
         <Transition name="tip">
           <!-- 报错文字 -->
-          <div class="error-tip" v-show="errorTipShow" :style="{fontSize: fontSize*0.7+'px'}">{{errorTip}}</div>
+          <div class="line-input-error-tip" v-show="errorTipShow" :style="{fontSize: fontSize*0.7+'px'}">{{errorTip}}</div>
         </Transition>
-        <div class="focus-line" :style="focusLineStyle"></div>
-        <div class="error-line" :style="errorLineStyle"></div>
+        <div class="line-input-focus-line" :style="focusLineStyle"></div>
+        <div class="line-input-error-line" :style="errorLineStyle"></div>
       </div>
     </div>
     
@@ -36,7 +37,6 @@
 
 <script>
 import { debounce } from '@/assets/untils/untils.js'
-import { defineExpose } from 'vue';
 export default {
   // 注册时可以简写为驼峰
   emits:["update:modelValue"],
@@ -76,6 +76,10 @@ export default {
     color: {
       value: String,
       default: '#555555'
+    },
+    type: {
+      value: String,
+      default: ''
     },
     modelValue:String,
   },
@@ -179,10 +183,7 @@ export default {
     }
   }
 }
-let shake = () => {
-  
-}
-defineExpose({shake})
+
 </script>
 
 <style scoped>
@@ -192,65 +193,77 @@ input{
   background: transparent;
   padding: 4px 10px;
   caret-color: #ddd;
-  width: 100%;
+  width: calc(100% - 24px);
 }
-.error-tip{
+.line-input-error-tip{
   color: #F56C6C;
   position: absolute;
   top: 8px;
   left: 4px;
 }
-.placeholder{
+.line-input-placeholder{
   position: absolute;
   color: #888;
   transition: .3s;
 }
-.empty-label{
+.line-input-empty-label{
   width: 100%;
 }
-.input{
+.line-input-input{
   flex: 1;
   position: relative;
 }
-.main{
+.line-input-main{
     width: 100%;
     display: flex;
     flex-direction: row;
 }
-.line{
+.line-input-line{
   height: 2px;
   width: 100%;
   background: #555;
   margin-top: 4px;
   position: relative;
 }
-.box{
+.line-input-box{
   width: 100%;
   position: relative;
 }
-.content{
+.line-input-content{
   display: flex;
   flex-direction: row;
   width: 100%;
 }
-.icon{
+.line-input-icon{
   width: 24px;
   display: flex;
   align-items: center;
 }
-.label{
+.line-input-label{
   white-space: nowrap;
   padding-right: 20px;
   padding-top: 1px;
 }
-.focus-line{
+.line-input-focus-line{
   position: absolute;
-  background: linear-gradient(to right, #FF8570 0%, #418CB7 100%);
+  background: linear-gradient(to right, #000, #FF8570, #418CB7, #FF8570, #000);
   height: 2px;
   transition: .7s;
   width: 100%;
+  background-position: 100% 0;
+  animation: bgSize 2s infinite ease-in-out alternate;
 }
-.error-line{
+@keyframes bgSize {
+      0% {
+        background-size: 200% 100%;
+        box-shadow: 0 0 4px #418CB7;
+      }
+      100% {
+        background-size: 100% 100%;
+        box-shadow: 0 0 4px #FF8570;
+      }
+}
+.line-input-error-line{
   position: absolute;
   background: #F56C6C;
   height: 2px;
