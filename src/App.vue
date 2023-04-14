@@ -26,7 +26,8 @@
         Login
       </div>
       <div class="input">
-        <LineInput/>
+        <LineInput :icon="true"><UserFilled /></LineInput>
+        <LineInput :label="'姓名'"/>
       </div>
     </div>
   </Modal>

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <!-- <div class="quotation-mark">引号</div> -->
-    <img alt="Vue logo" src="../assets/logo.png">
+    <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
     <HelloWorld msg="Welcome to Your Vue.js App"/>
     <Modal :show="false">
       <div>modal</div>

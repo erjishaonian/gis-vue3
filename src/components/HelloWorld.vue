@@ -28,14 +28,42 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
+    <div style="padding:20px;width:300px;">
+        <LineInput :icon="true" :fontSize="18" :placeholder="'姓名'" v-model="value1" ref="shake"><UserFilled /></LineInput>
+        <div style="height:40px"></div>
+        <LineInput :label="'姓名'"/>
+        <div style="height:40px"></div>
+        <LineInput :labelShow="false"/>
+        <div style="height:40px"></div>
+        <button @click="button">value1</button>
+        <button @click="shake">shake</button>
+    </div>
+        
   </div>
 </template>
 
 <script>
+import LineInput from '@/components/LineInput.vue'
 export default {
   name: 'HelloWorld',
+  components: {
+    LineInput
+  },
   props: {
     msg: String
+  },
+  data(){
+    return{
+      value1: '1'
+    }
+  },
+  methods:{
+    button(){
+      console.log(this.value1)
+    },
+    shake(){
+      this.$refs.shake.shake('填错啦！')
+    }
   }
 }
 </script>
