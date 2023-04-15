@@ -9,8 +9,9 @@ const routes = [
     meta: {
       // 添加路由元信息
       topStyle: {
-        color: '#555555',
-        background: '#ffffff'
+        color: '#000000',
+        background: '#42b983',
+        keep: 'none'
       }
     }
   },

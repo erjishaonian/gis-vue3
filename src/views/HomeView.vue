@@ -2,7 +2,7 @@
   <div class="home">
     <!-- <div class="quotation-mark">引号</div> -->
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <HelloWorld msg="我的组件库"/>
     <Modal :show="false">
       <div>modal</div>
     </Modal>

@@ -36,8 +36,19 @@
 </template>
 
 <script>
-import { debounce } from '@/assets/untils/untils.js'
+function debounce(fn,delay) {
+    var timeout = null; // 创建一个标记用来存放定时器的返回值
+    return function (e) {
+        // 每当用户输入的时候把前一个 setTimeout clear 掉
+        clearTimeout(timeout); 
+        // 然后又创建一个新的 setTimeout, 这样就能保证interval 间隔内如果时间持续触发，就不会执行 fn 函数
+        timeout = setTimeout(() => {
+            fn.apply(this, arguments);
+        }, delay);
+    };
+}
 export default {
+  name: 'LineInput',
   // 注册时可以简写为驼峰
   emits:["update:modelValue"],
   computed:{
@@ -84,7 +95,13 @@ export default {
     modelValue:String,
   },
   watch: {
-    
+    value(oldV, newV){
+      this.placeholderStyle = {
+        top: '-' + this.fontSize*1.4 + 'px',
+        left: '0',
+        fontSize: this.fontSize/2 + 'px'
+      }
+    }
   },
   data(){
     return{
@@ -247,7 +264,7 @@ input{
 .line-input-focus-line{
   position: absolute;
   background: linear-gradient(to right, #000, #FF8570, #418CB7, #FF8570, #000);
-  height: 2px;
+  height: 3px;
   transition: .7s;
   width: 100%;
   background-position: 100% 0;
@@ -266,7 +283,7 @@ input{
 .line-input-error-line{
   position: absolute;
   background: #F56C6C;
-  height: 2px;
+  height: 3px;
   transition: .7s;
   width: 100%;
 }

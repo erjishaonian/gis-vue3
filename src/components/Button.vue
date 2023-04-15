@@ -4,6 +4,7 @@
         color: specialStyle.color || Fcolor,
         borderColor: specialStyle.borderColor || borderColor,
         background: specialStyle.background || background,
+        animation: buttonAnimation,
         padding: padding,
         fontSize: fontSize + 'px',
         borderRadius: borderRadius + 'px',
@@ -14,7 +15,6 @@
     @mouseup="mouseup"
     @mouseover="mouseover"
     @mouseout="mouseout"
-    :class="'button-main-'+type"
   >
     <slot/>
   </div>
@@ -22,6 +22,7 @@
 
 <script>
 export default {
+    name: 'Button',
     props: {
         type: {
             value: String,
@@ -75,6 +76,7 @@ export default {
             mouseIn: false,
             color: null,
             line: false,
+            buttonAnimation: '',
             styleKey: {
                 'normal': {
                     color: '#555555',
@@ -90,6 +92,18 @@ export default {
                 },
                 'error': {
                     color: '#F56C6C',
+                    line: false
+                },
+                'success': {
+                    color: '#67C23A',
+                    line: false
+                },
+                'warining': {
+                    color: '#E6A23C',
+                    line: false
+                },
+                'primary': {
+                    color: '#0077ff',
                     line: false
                 }
             }
@@ -143,6 +157,10 @@ export default {
         mouseup(){
             if(this.mouseIn){
                 this.mouseover()
+                this.buttonAnimation = 'button-click-2026544 .3s'
+                setTimeout(() => {
+                    this.buttonAnimation = null
+                }, 300);
                 return
             }
             this.specialInit()
@@ -201,7 +219,7 @@ export default {
             this.line = this.special.line
         }
         else if(this.type && this.styleKey[`${this.type}`]){
-            this.line = this.styleKey[`${this.type}`].line
+            this.line = this.special.line ||this.styleKey[`${this.type}`].line
             this.color = this.styleKey[`${this.type}`].color
         }
         else{
@@ -227,12 +245,20 @@ export default {
     border-style: solid;
     justify-content: center;
     cursor: pointer;
-    /* transition: box-shadow .3s; */
+    /* transition: .1s; */
 
     -moz-user-select:none;/*火狐*/
     -webkit-user-select:none;/*webkit浏览器*/
     -ms-user-select:none;/*IE10*/
     -khtml-user-select:none;/*早期浏览器*/
     user-select:none;
+}
+
+</style>
+<style>
+@keyframes button-click-2026544 {
+  20% {
+    transform: scale(0.95);
+  }
 }
 </style>

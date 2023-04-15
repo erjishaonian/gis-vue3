@@ -9,6 +9,7 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
 
 export default {
+  name: 'MapDemo',
   mounted() {
     // create map instance
     const map = L.map('map').setView([43.8, 125.2], 10);

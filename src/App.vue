@@ -4,7 +4,13 @@
     <router-link to="/about">About</router-link> |
     <router-link to="/index">Index</router-link>
   </nav> -->
-  <div class="top" :style="{color: topStyle.color||'#eeeeee'}">
+  <div class="top" :style="{
+      color: topStyle.color||'#eeeeee', 
+      background: topStyle.background
+      }"
+      :class="{'bf': !isTop}"
+      >
+      
       <!-- <img class="image" src="@/assets/img/logo-white.png" @click="this.$router.push('index')"> -->
       <div class="title" @click="this.$router.push('index')">智慧农业</div>
       <div style="flex:0.3"></div>
@@ -15,7 +21,7 @@
       <div style="flex:1"></div>
       <div class="login button-bottom-line" @click="loginModalOpen">登录</div>
   </div>
-  <router-view v-slot="{ Component, route }" @topChange="topChange">
+  <router-view v-slot="{ Component, route }">
     <transition :name="transitionName" mode="out-in">
       <component :is="Component" :key="route.fullPath" />
     </transition>
@@ -41,6 +47,7 @@ import router from './router/index.js'
 import '@/assets/untils/button.bottom.line.css'
 import Modal from '@/components/Modal.vue'
 import LineInput from '@/components/LineInput.vue'
+import {throttle} from '@/assets/untils/untils.js'
 
 export default defineComponent({
   name: 'App',
@@ -58,7 +65,8 @@ export default defineComponent({
       topStyle: {
         color: null,
         background: null
-      }
+      },
+      isTop: false
     }
   },
   created () {
@@ -70,15 +78,19 @@ export default defineComponent({
       else
         this.topStyle = {
           color: '#eeeeee',
-          background: 'rgba(0, 0, 0, 0.8)'
+          background: '#000000',
+          keep: 'none'
         }
-      // this.transitionName = transitionName || 'page'
+      this.topTrandorm()
     })
-    // console.log(this.$route)
-    console.log(this.topColor)
   },
   mounted () {
-    
+    // this.topTrandorm()
+    //节流 100内执行一次
+    window.addEventListener('scroll', throttle(this.topTrandorm, 100))
+  },
+  unmounted(){
+    window.removeEventListener('scroll')
   },
   methods: {
     loginModalOpen () {
@@ -89,15 +101,28 @@ export default defineComponent({
     },
     topChange (e) {
       // console.log(e)
-      let top = document.getElementsByClassName('top')[0]
+      // console.log(this.topStyle.background)
       //置顶
       if(e){
-        top.style.backgroundColor ='rgba(0, 0, 0, 0)'
+        this.topStyle.background = this.topStyle.background.substring(0,7) + '00'
       }
       //未置顶
       else{
-        top.style.backgroundColor = this.topStyle.background ||  'rgba(0, 0, 0, 0.8)'
+        this.topStyle.background = this.topStyle.background.substring(0,7) + 'dd'
       }
+    },
+    topTrandorm(){
+      let scrollPosition = window.pageYOffset
+      if(scrollPosition > 20){
+        if(!this.isTop) return
+        this.isTop = false
+        this.topChange(false)
+      }
+      else if(scrollPosition <= 20){
+        this.isTop = true
+        this.topChange(true)
+      }
+      return
     }
   }
 })
@@ -122,6 +147,7 @@ export default defineComponent({
   transition: all 0.3s ease;
   background-color: rgba(0, 0, 0, 0);
   display: flex;
+  // backdrop-filter: blur(3px);
   flex-direction: row;
   z-index: 999;
   align-items: center;
@@ -148,6 +174,9 @@ export default defineComponent({
   .router, .login{
     height: 32px;
   }
+}
+.bf{
+  backdrop-filter: blur(3px);
 }
 .modal-main{
   display: flex;

@@ -41,7 +41,6 @@ export default {
   data () {
     return {
       indexTitle: '农业GIS及综合预警服务平台',
-      topChange: true,
       decsList:[
         {
           title: '「GIS地图」',
@@ -78,18 +77,7 @@ export default {
   },
   methods: {
     imageTrandorm(){
-      let scrollPosition = window.pageYOffset
-      let pageHeight = document.getElementsByClassName('page')[0].scrollHeight
-      if(scrollPosition > 20 && this.topChange){
-        this.topChange = false
-        this.$emit('topChange', this.topChange)
-      }
-      else if(scrollPosition <= 20 && !this.topChange){
-        this.topChange = true
-        this.$emit('topChange', this.topChange)
-      }
-      // console.log(window)
-      //窗口高度
+     //窗口高度
       let windowHeight = window.outerHeight
       let halfWindowHeight = windowHeight/2
       let image = document.getElementsByClassName('image')
@@ -109,6 +97,9 @@ export default {
     this.imageTrandorm()
     //节流 100内执行一次
     window.addEventListener('scroll', throttle(this.imageTrandorm, 100))
+  },
+  unmounted(){
+    // window.removeEventListener('scroll')
   }
 }
 </script>

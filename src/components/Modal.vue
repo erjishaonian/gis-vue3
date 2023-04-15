@@ -9,17 +9,17 @@
             <div v-show="show" class="m" @click="close">
                 <div class="main"  @click.stop="" :style="(width?'width:'+width+'px;':'')+(borderRadius?'border-radius:'+borderRadius+'px;overflow:hidden;':'')">
                     <div class="top">
-                        <div class="title" v-if="!onlyContent">
-                            Title
-                        </div>
+                        <h2 class="title" v-if="!onlyContent">
+                            {{title}}
+                        </h2>
                         <div class="close" @click="close" :style="(borderRadius?'border-radius:0 0'+borderRadius+'px 0;':'')">
                             <el-icon class="icon" :size="24"><Close /></el-icon>
                         </div>
                     </div>
                     <slot style="flex: 1"></slot>
-                    <div class="buttom" v-if="!onlyContent">
+                    <!-- <div class="buttom" v-if="!onlyContent">
                         bottom
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </Transition>
@@ -29,6 +29,7 @@
 
 <script>
 export default {
+    name: 'Modal',
     props: {
         show: {
             value: Boolean,
@@ -45,12 +46,16 @@ export default {
         borderRadius: {
             value: Number,
             default: null
+        },
+        title: {
+            value: String,
+            default: ''
         }
     },
     watch: {
         show(oldV, newV){
             this.mShow = newV
-            console.log(newV)
+            // console.log(newV)
         }
     },
     data(){
@@ -59,7 +64,7 @@ export default {
         }
     },
     created () {
-        console.log('modal created')
+        // console.log('modal created')
     },
     methods: {
         close(){
@@ -80,7 +85,7 @@ export default {
     height: 100%;
     z-index: 999;
     width: 100%;
-    background-color: rgba($color: #000000, $alpha: 0.4);
+    background-color: rgba($color: #000000, $alpha: 0.5);
     
 }
 .m{
@@ -100,7 +105,6 @@ export default {
     z-index: 99999;
     width: 900px;
     position: fixed;
-    backdrop-filter: blur(8px);
     top: 50%;
     left: 50%;
     right: 0;
@@ -111,7 +115,7 @@ export default {
     box-shadow: 0 0 20px 10px rgba($color: #ffffff, $alpha: 0.15);
     .top{
         position: relative;
-        height: 40px;
+        height: 50px;
         .title{
             position: absolute;
             top: 50%;
@@ -146,5 +150,36 @@ export default {
     0%{-webkit-transform:rotate(0deg);}
     100%{-webkit-transform:rotate(270deg);}
 }
+.bf{
+    backdrop-filter: blur(8px);
+}
 
+
+.modal {
+    /*添加过渡效果*/
+    transition: opacity .5s;
+}
+/* 定义进入动画 */
+.modal-enter-active { 
+    transition: opacity .3s;
+}
+.modal-enter-from {
+    opacity: 0;
+}
+/* 定义离开动画 */
+.modal-leave-active {
+    transition: opacity .4s;
+}
+.modal-leave-to {
+    opacity: 0;
+}
+
+/* 定义进入动画 */
+.fi-enter-active { 
+    animation: fadeInUp .5s ;
+}
+/* 定义离开动画 */
+.fi-leave-active {
+    animation: fadeOutDown .5s;
+}
 </style>
