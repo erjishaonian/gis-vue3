@@ -84,6 +84,10 @@ export default {
       value: String,
       default: null
     },
+    placeholderColor: {
+      value: String,
+      default: '#888888'
+    },
     color: {
       value: String,
       default: '#555555'
@@ -108,7 +112,8 @@ export default {
       placeholderStyle: {
         top: '0',
         left: '10px',
-        fontSize: this.fontSize + 'px'
+        fontSize: this.fontSize + 'px',
+        color: this.placeholderColor
       },
       boxAnimation: '',
       labelShowThis: this.labelShow,
@@ -220,7 +225,6 @@ input{
 }
 .line-input-placeholder{
   position: absolute;
-  color: #888;
   transition: .3s;
 }
 .line-input-empty-label{
@@ -263,21 +267,21 @@ input{
 }
 .line-input-focus-line{
   position: absolute;
-  background: linear-gradient(to right, #000, #FF8570, #418CB7, #FF8570, #000);
+  background: linear-gradient(to right, #000, #42b983, #418CB7, #42b983, #000);
   height: 3px;
   transition: .7s;
   width: 100%;
   background-position: 100% 0;
-  animation: bgSize 2s infinite ease-in-out alternate;
+  animation: bgSize 10s infinite ease-in-out alternate;
 }
 @keyframes bgSize {
       0% {
-        background-size: 200% 100%;
+        background-size: 600% 100%;
         box-shadow: 0 0 4px #418CB7;
       }
       100% {
         background-size: 100% 100%;
-        box-shadow: 0 0 4px #FF8570;
+        box-shadow: 0 0 4px #42b983;
       }
 }
 .line-input-error-line{

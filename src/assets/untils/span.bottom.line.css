@@ -1,5 +1,5 @@
 .span-bottom-line{
-    background: linear-gradient(to right, #ec695c, #61c454) no-repeat bottom right;
+    background: linear-gradient(to right, #42b983, #418CB7) no-repeat bottom right;
     background-size: 0 3px;
     transition:  background-size 0.7s;
 }

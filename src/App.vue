@@ -1,9 +1,5 @@
 <template>
-  <!-- <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/index">Index</router-link>
-  </nav> -->
+<div>
   <div class="top" :style="{
       color: topStyle.color||'#eeeeee', 
       background: topStyle.background
@@ -12,16 +8,16 @@
       >
       
       <!-- <img class="image" src="@/assets/img/logo-white.png" @click="this.$router.push('index')"> -->
-      <div class="title" @click="this.$router.push('index')">智慧农业</div>
+      <div class="title" @click="this.$router.push('index')">{{topMenu.title}}</div>
       <div style="flex:0.3"></div>
-      <div class="router button-bottom-line">地图展示</div>
-      <div class="router button-bottom-line">气象数据</div>
-      <div class="router button-bottom-line">专家指导</div>
-      <div class="router button-bottom-line">工作台</div>
+      <div v-for="(item, i) in topMenu.list" :key="i" 
+        class="router button-bottom-line"
+        @click="this.$router.push(item.url)"
+        >{{item.name}}</div>
       <div style="flex:1"></div>
-      <div class="login button-bottom-line" @click="loginModalOpen">登录</div>
+      <div v-show="topMenu.loginShow" class="login button-bottom-line" @click="loginModalOpen">登录</div>
   </div>
-  <router-view v-slot="{ Component, route }">
+  <router-view v-slot="{ Component, route }" style="min-width: 900px">
     <transition :name="transitionName" mode="out-in">
       <component :is="Component" :key="route.fullPath" />
     </transition>
@@ -32,13 +28,13 @@
         Login
       </div>
       <div class="input">
-        <LineInput :icon="true"  :fontSize="20" :placeholder="'账号'" v-model="user.username" ref="username"><User /></LineInput>
-        <LineInput :icon="true"  :fontSize="20" :placeholder="'密码'" v-model="user.password" type="password" ref="password"><Lock /></LineInput>
+        <LineInput :icon="true" :placeholderColor="'#333333'" :fontSize="20" :placeholder="'账号'" v-model="user.username" ref="username"><User /></LineInput>
+        <LineInput :icon="true" :placeholderColor="'#333333'" :fontSize="20" :placeholder="'密码'" v-model="user.password" type="password" ref="password"><Lock /></LineInput>
         
       </div>
     </div>
   </Modal>
-  <!-- <router-view/> -->
+</div>
 </template>
 
 <script>
@@ -66,13 +62,34 @@ export default defineComponent({
         color: null,
         background: null
       },
-      isTop: false
+      isTop: false,
+      topMenu: {
+        title: '智慧农业',
+        url: '/index',
+        list: [{
+          name: '地图展示',
+          url: '/gis'
+        },{
+          name: '气象预警',
+          url: '/index'
+        },{
+          name: '专家指导',
+          url: '/index'
+        },{
+          name: 'OA审批',
+          url: '/index'
+        }],
+        loginShow: true
+      }
     }
   },
   created () {
     // 监听路由变化，更新transitionName
     router.afterEach((to, from) => {
       // console.log(to)
+      if(to.meta && to.meta.topMenu){
+        this.topMenu = to.meta.topMenu
+      }
       if(to.meta && to.meta.topStyle)
         this.topStyle = to.meta.topStyle
       else
@@ -108,7 +125,7 @@ export default defineComponent({
       }
       //未置顶
       else{
-        this.topStyle.background = this.topStyle.background.substring(0,7) + 'dd'
+        this.topStyle.background = this.topStyle.background.substring(0,7) + 'bb'
       }
     },
     topTrandorm(){
@@ -131,12 +148,10 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 #app {
-  // font-family: Avenir, Helvetica, Arial, sans-serif;
   font-family: '黑体';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
 }
 .top{
   height: 90px;
@@ -148,6 +163,7 @@ export default defineComponent({
   background-color: rgba(0, 0, 0, 0);
   display: flex;
   // backdrop-filter: blur(3px);
+  min-width: 900px;
   flex-direction: row;
   z-index: 999;
   align-items: center;
@@ -195,18 +211,6 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     gap: 20px;
-  }
-}
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
   }
 }
 *{

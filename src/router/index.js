@@ -1,28 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView,
-    meta: {
-      // 添加路由元信息
-      topStyle: {
-        color: '#000000',
-        background: '#42b983',
-        keep: 'none'
-      }
-    }
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  },
+  //农业gis
   {
     path: '/index',
     name: 'index',
@@ -35,6 +14,59 @@ const routes = [
       // 添加路由元信息
       transitionName: 'page'
     }
+  },
+  {
+    path: '/gis',
+    name: 'gis',
+    component: () => import('../views/gis/Gis.vue'),
+  },
+  //贰年的组件库
+  {
+    path: '/ernian',
+    name: 'ernian',
+    component: () => import('../views/ernian/index.vue'),
+    meta: {
+      // 添加路由元信息
+      topStyle: {
+        color: '#000000',
+        background: '#42b983',
+        keep: 'none'
+      },
+      topMenu: {
+        title: '贰年的 vue3 组件库',
+        url: '/',
+        list: [{
+          name: '快速上手',
+          url: '/'
+        },{
+          name: '组件',
+          url: '/'
+        }],
+        loinShow: false
+      }
+    },
+    children: [
+      {
+        path: '/',
+        component: () => import('../views/ernian/pages/Button.vue')
+      },
+      {
+        path: '/button',
+        component: () => import('../views/ernian/pages/Button.vue')
+      }
+    ]
+  },
+  //测试页面
+  {
+    path: '/aboutView',
+    name: 'aboutView',
+    component: () => import('../views/AboutView.vue')
+  },
+  //组件页面
+  {
+    path: '/homeView',
+    name: 'homeView',
+    component: () => import('../views/HomeView.vue')
   }
 ]
 

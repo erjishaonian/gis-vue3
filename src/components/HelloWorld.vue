@@ -127,7 +127,7 @@ h2 {
   gap: 20px;
 }
 .hello{
-  padding-top: 100px;
+  padding-top: 10px;
 }
 .row{
   display: flex;

@@ -86,6 +86,7 @@ export default {
     z-index: 999;
     width: 100%;
     background-color: rgba($color: #000000, $alpha: 0.5);
+    backdrop-filter: blur(4px);
     
 }
 .m{
@@ -100,7 +101,7 @@ export default {
     z-index: 1000;
 }
 .main{
-    background-color: rgba(255, 255, 255, .5);
+    background-color: rgba(255, 255, 255, .62);
     height: 600px;
     z-index: 99999;
     width: 900px;
@@ -150,9 +151,6 @@ export default {
     0%{-webkit-transform:rotate(0deg);}
     100%{-webkit-transform:rotate(270deg);}
 }
-.bf{
-    backdrop-filter: blur(8px);
-}
 
 
 .modal {
@@ -173,7 +171,6 @@ export default {
 .modal-leave-to {
     opacity: 0;
 }
-
 /* 定义进入动画 */
 .fi-enter-active { 
     animation: fadeInUp .5s ;

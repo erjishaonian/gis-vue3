@@ -16,3 +16,22 @@
 .page-leave-to {
     opacity: 0;
 }
+
+.com {
+    /*添加过渡效果*/
+    transition: opacity 1s;
+}
+/* 定义进入动画 */
+.com-enter-active { 
+    transition: opacity 1s;
+}
+.com-enter-from {
+    opacity: 0;
+}
+/* 定义离开动画 */
+.com-leave-active {
+    transition: opacity .2s;
+}
+.com-leave-to {
+    opacity: 0;
+}

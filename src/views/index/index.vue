@@ -89,14 +89,15 @@ export default {
         let elementHeight = element.clientHeight
         //元素偏移量
         let imageTransformY = (halfWindowHeight-(top+elementHeight/2))*100/halfWindowHeight-100
-        element.style.transform = 'translateY(' + imageTransformY +'px)'
+        // element.style.transform = 'translateY(' + imageTransformY +'px)'
+        element.style.top = imageTransformY +'px'
       }
     }
   },
   mounted () {
     this.imageTrandorm()
-    //节流 100内执行一次
-    window.addEventListener('scroll', throttle(this.imageTrandorm, 100))
+    //节流 xx内执行一次
+    window.addEventListener('scroll', throttle(this.imageTrandorm, 10))
   },
   unmounted(){
     // window.removeEventListener('scroll')
@@ -188,9 +189,11 @@ export default {
           width: 100%;
           height: 800px;
           object-fit: cover;
-          transform: translateY(-100px);
+          // transform: translateY(-100px);
+          position: absolute;
+          top: -100px;
           filter: brightness(60%) blur(2px);
-          transition: all 0.3s ease;
+          transition: transform 0.3s ease;
         }
       }
       .item-text{
