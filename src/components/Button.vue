@@ -9,7 +9,8 @@
         fontSize: fontSize + 'px',
         borderRadius: borderRadius + 'px',
         width: width,
-        boxShadow: specialBoxShadow
+        boxShadow: specialBoxShadow,
+        transition: transition
     }"
     @mousedown="mousedown"
     @mouseup="mouseup"
@@ -63,6 +64,10 @@ export default {
                 color: null
             }
         },
+        transition: {
+            value: String,
+            default: null
+        }
     },
     data() {
         return{
@@ -259,6 +264,9 @@ export default {
 @keyframes button-click-2026544 {
   20% {
     transform: scale(0.95);
+  }
+  60% {
+    transform: scale(1.02);
   }
 }
 </style>

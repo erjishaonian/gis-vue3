@@ -4,7 +4,8 @@
         <div v-if="type === '晴'" class="sun-weather-background weather-background-main">
             <div class="weather-background-sun"></div>
         </div>
-        <div v-if="type.indexOf('雨')!==-1" class="rain-weather-background weather-background-main">
+        <div v-if="type.indexOf('雨')!==-1" class="rain-weather-background weather-background-main" 
+          :style="(type==='冻雨')?'background-color: rgb(185, 185, 185);':''">
             <div class="back-row-toggle splat-toggle">
                 <div class="rain front-row"></div>
             </div>
@@ -13,7 +14,32 @@
             <div v-for="i in snowArray[type]" :key="i" class="snow"></div>
         </div>
         <div v-if="type.indexOf('雷')!==-1" class="thunder-weather-background weather-background-main">
-            
+            <div class="thunder-weather-main"></div>
+        </div>
+        <div v-if="type==='雾'" class="wu-weather-background weather-background-main">
+          <div class="wu-main">
+            <div class="wu" v-for="i in 6" :key="i"></div>
+          </div>
+        </div>
+        <div v-if="type==='霾'" class="mai-weather-background weather-background-main">
+          <div class="mai-main">
+            <div class="mai" v-for="i in 6" :key="i"></div>
+          </div>
+        </div>
+        <div v-if="type==='浮尘'" class="fuchen-weather-background weather-background-main">
+          <div class="fuchen-main">
+            <div class="fuchen" v-for="i in 6" :key="i"></div>
+          </div>
+        </div>
+        <div v-if="type==='扬沙'" class="yangsha-weather-background weather-background-main">
+          <div class="yangsha-main">
+            <div class="yangsha" v-for="i in 6" :key="i"></div>
+          </div>
+        </div>
+        <div v-if="type==='强沙尘暴'" class="shachenbao-weather-background weather-background-main">
+          <div class="shachenbao-main">
+            <div class="shachenbao" v-for="i in 6" :key="i"></div>
+          </div>
         </div>
     </transition-group>
   </div>
@@ -46,9 +72,19 @@ export default {
             rainArray: {
                 '阵雨': 1,
                 '小雨': 3,
+                '小到中雨': 4,
                 '中雨': 5,
+                '中到到大雨': 6,
                 '大雨': 7,
-                '雷阵雨': 5
+                '大到暴雨': 8,
+                '暴雨': 9,
+                '暴雨到大暴雨': 10,
+                '大暴雨': 11,
+                '特大暴雨': 13,
+                '雷阵雨': 7,
+                '雨夹雪': 7,
+                '冻雨': 5,
+                '雷阵雨伴有冰雹': 7
             },
             snowArray: {
                 '阵雪': 20,
@@ -88,6 +124,323 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+@function random_range($min, $max) {
+  $rand: random();
+  $random_range: $min + floor($rand * (($max - $min) + 1));
+  @return $random_range;
+}
+.thunder-weather-main{
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background: rgba(228, 228, 228, 0.8);
+  opacity: 0;
+  animation: light 10s infinite alternate;
+}
+@keyframes light {
+  48%{
+    opacity: 0;
+  }
+  50%{
+    opacity: 1;
+  }
+  52%{
+    opacity: 0;
+  }
+}
+</style>
+<style lang="scss" scoped>
+.shachenbao-weather-background{
+  background-color: rgba(190, 173, 75, 0.5);
+  position: relative;
+}
+.shachenbao-main{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  animation: changeright 60s linear infinite;
+}
+.shachenbao{
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+@keyframes changeright{       
+  0%{-webkit-transform:rotate(0deg);}
+  50%{-webkit-transform:rotate(180deg);}
+  100%{-webkit-transform:rotate(360deg);}
+}
+.shachenbao:nth-child(1){
+  top: 60%;
+  left: 50%;
+  box-shadow: 0 0 500px 500px rgba(211, 179, 73, 0.9);
+}
+.shachenbao:nth-child(2){
+  top: 20%;
+  left: 20%;
+  box-shadow: 0 0 300px 300px rgba(211, 179, 73, 0.9);
+}
+.shachenbao:nth-child(3){
+  top: 20%;
+  left: 80%;
+  box-shadow: 0 0 200px 200px rgba(211, 179, 73, 0.9);
+}
+.shachenbao:nth-child(4){
+  top: 100%;
+  left: 35%;
+  box-shadow: 0 0 140px 140px rgba(211, 179, 73, 0.9);
+}
+.shachenbao:nth-child(5){
+  top: 110%;
+  left: 70%;
+  box-shadow: 0 0 260px 260px rgba(211, 179, 73, 0.9);
+}
+.shachenbao:nth-child(6){
+  top: 50%;
+  left: 5%;
+  box-shadow: 0 0 300px 300px rgba(211, 179, 73, 0.9);
+}
+</style>
+<style lang="scss" scoped>
+@function random_range($min, $max) {
+  $rand: random();
+  $random_range: $min + floor($rand * (($max - $min) + 1));
+  @return $random_range;
+}
+.yangsha-weather-background{
+  background-color: rgb(60, 127, 205);
+  position: relative;
+}
+.yangsha-main{
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.yangsha{
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+@keyframes right{       
+  0%{-webkit-transform:translateX(0);}
+  50%{-webkit-transform:translateX(40vw);}
+  100%{-webkit-transform:translateX(0);}
+}
+@keyframes left{       
+  0%{-webkit-transform:translateX(0);}
+  50%{-webkit-transform:translateX(-40vw);}
+  100%{-webkit-transform:translateX(0);}
+}
+.yangsha:nth-child(1){
+  top: 60%;
+  left: 50%;
+  box-shadow: 0 0 100px 100px rgba(211, 179, 73, 0.5);
+  animation: left random_range(30, 60)*1s linear infinite;
+}
+.yangsha:nth-child(2){
+  top: 40%;
+  left: 30%;
+  box-shadow: 0 0 200px 200px rgba(211, 179, 73, 0.5);
+  animation: right random_range(30, 60)*1s linear infinite;
+}
+.yangsha:nth-child(3){
+  top: 20%;
+  left: 70%;
+  box-shadow: 0 0 100px 100px rgba(211, 179, 73, 0.5);
+  animation: left random_range(30, 60)*1s linear infinite;
+}
+.yangsha:nth-child(4){
+  top: 70%;
+  left: 35%;
+  box-shadow: 0 0 140px 140px rgba(211, 179, 73, 0.5);
+  animation: right random_range(30, 60)*1s linear infinite;
+}
+.yangsha:nth-child(5){
+  top: 70%;
+  left: 70%;
+  box-shadow: 0 0 160px 160px rgba(211, 179, 73, 0.5);
+  animation: left random_range(30, 60)*1s linear infinite;
+}
+.yangsha:nth-child(6){
+  top: 50%;
+  left: 60%;
+  box-shadow: 0 0 100px 100px rgba(211, 179, 73, 0.5);
+  animation: right random_range(30, 60)*1s linear infinite;
+}
+</style>
+<style lang="scss" scoped>
+@function random_range($min, $max) {
+  $rand: random();
+  $random_range: $min + floor($rand * (($max - $min) + 1));
+  @return $random_range;
+}
+.fuchen-weather-background{
+  background-color: rgb(60, 127, 205);
+  position: relative;
+}
+.fuchen-main{
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.fuchen{
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+@keyframes right{       
+  0%{-webkit-transform:translateX(0);}
+  50%{-webkit-transform:translateX(40vw);}
+  100%{-webkit-transform:translateX(0);}
+}
+@keyframes left{       
+  0%{-webkit-transform:translateX(0);}
+  50%{-webkit-transform:translateX(-40vw);}
+  100%{-webkit-transform:translateX(0);}
+}
+.fuchen:nth-child(1){
+  top: 60%;
+  left: 50%;
+  box-shadow: 0 0 100px 100px rgba(211, 179, 73, 0.3);
+  animation: left random_range(30, 60)*1s linear infinite;
+}
+.fuchen:nth-child(2){
+  top: 40%;
+  left: 30%;
+  box-shadow: 0 0 200px 200px rgba(211, 179, 73, 0.3);
+  animation: right random_range(30, 60)*1s linear infinite;
+}
+.fuchen:nth-child(3){
+  top: 20%;
+  left: 70%;
+  box-shadow: 0 0 100px 100px rgba(211, 179, 73, 0.3);
+  animation: left random_range(30, 60)*1s linear infinite;
+}
+.fuchen:nth-child(4){
+  top: 70%;
+  left: 35%;
+  box-shadow: 0 0 140px 140px rgba(211, 179, 73, 0.3);
+  animation: right random_range(30, 60)*1s linear infinite;
+}
+.fuchen:nth-child(5){
+  top: 70%;
+  left: 70%;
+  box-shadow: 0 0 160px 160px rgba(211, 179, 73, 0.3);
+  animation: left random_range(30, 60)*1s linear infinite;
+}
+.fuchen:nth-child(6){
+  top: 50%;
+  left: 60%;
+  box-shadow: 0 0 100px 100px rgba(211, 179, 73, 0.3);
+  animation: right random_range(30, 60)*1s linear infinite;
+}
+</style>
+<style lang="scss" scoped>
+.mai-weather-background{
+  background-color: rgba(143, 143, 143, 0.8);
+  position: relative;
+}
+.mai-main{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  animation: changeright 80s linear infinite;
+}
+.mai{
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+@keyframes changeright{       
+  0%{-webkit-transform:rotate(0deg);}
+  50%{-webkit-transform:rotate(180deg);}
+  100%{-webkit-transform:rotate(360deg);}
+}
+.mai:nth-child(1){
+  top: 60%;
+  left: 50%;
+  box-shadow: 0 0 1000px 1000px rgb(112, 112, 112);
+}
+.mai:nth-child(2){
+  top: 40%;
+  left: 30%;
+  box-shadow: 0 0 200px 200px rgb(119, 118, 118);
+}
+.mai:nth-child(3){
+  top: 20%;
+  left: 70%;
+  box-shadow: 0 0 100px 100px rgb(114, 113, 113);
+}
+.mai:nth-child(4){
+  top: 70%;
+  left: 35%;
+  box-shadow: 0 0 140px 140px rgb(112, 112, 112);
+}
+.mai:nth-child(5){
+  top: 70%;
+  left: 70%;
+  box-shadow: 0 0 160px 160px rgb(117, 117, 117);
+}
+.mai:nth-child(6){
+  top: 50%;
+  left: 60%;
+  box-shadow: 0 0 100px 100px rgb(110, 110, 110);
+}
+</style>
+<style lang="scss" scoped>
+.wu-weather-background{
+  background-color: rgba(170, 170, 170, 0.8);
+  position: relative;
+}
+.wu-main{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  animation: changeright 80s linear infinite;
+}
+.wu{
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+@keyframes changeright{       
+  0%{-webkit-transform:rotate(0deg);}
+  50%{-webkit-transform:rotate(180deg);}
+  100%{-webkit-transform:rotate(360deg);}
+}
+.wu:nth-child(1){
+  top: 60%;
+  left: 50%;
+  box-shadow: 0 0 1000px 1000px rgb(160, 160, 160);
+}
+.wu:nth-child(2){
+  top: 40%;
+  left: 30%;
+  box-shadow: 0 0 200px 200px rgb(163, 163, 163);
+}
+.wu:nth-child(3){
+  top: 20%;
+  left: 70%;
+  box-shadow: 0 0 100px 100px rgb(167, 167, 167);
+}
+.wu:nth-child(4){
+  top: 70%;
+  left: 35%;
+  box-shadow: 0 0 140px 140px rgb(170, 170, 170);
+}
+.wu:nth-child(5){
+  top: 70%;
+  left: 70%;
+  box-shadow: 0 0 160px 160px rgb(175, 175, 175);
+}
+.wu:nth-child(6){
+  top: 50%;
+  left: 60%;
+  box-shadow: 0 0 100px 100px rgb(161, 161, 161);
+}
+</style>
 <style lang="scss" scoped>
 .snow-weather-background{
     background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
@@ -277,6 +630,7 @@ export default {
 </style>
 <style scoped>
 .weather-background{
+    background-color: black;
     position: fixed;
     width: 100%;
     height: 100%;

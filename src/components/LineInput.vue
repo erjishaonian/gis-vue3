@@ -15,6 +15,8 @@
               :value="value" 
               @input="input"
               :type="type"
+              @change="change"
+              :maxlength="((maxLen===-1)?'':maxLen)"
               />
           <div class="line-input-placeholder" v-if="label===null" :style="placeholderStyle">{{placeholder}}</div>
         </div>
@@ -50,7 +52,7 @@ function debounce(fn,delay) {
 export default {
   name: 'LineInput',
   // 注册时可以简写为驼峰
-  emits:["update:modelValue"],
+  emits:["update:modelValue","change"],
   computed:{
       value:{
           // 如果正常访问,返回给this.modelValue
@@ -96,6 +98,10 @@ export default {
       value: String,
       default: ''
     },
+    maxLen: {
+      value: Number,
+      default: -1
+    },
     modelValue:String,
   },
   watch: {
@@ -103,7 +109,7 @@ export default {
       this.placeholderStyle = {
         top: '-' + this.fontSize*1.4 + 'px',
         left: '0',
-        fontSize: this.fontSize/2 + 'px'
+        fontSize: this.fontSize*2/3 + 'px'
       }
     }
   },
@@ -134,6 +140,7 @@ export default {
   methods: {
     input(e){
       this.value = e.target.value
+      this.$emit('change', e.target.value)
     },
     blur(){
       if(this.value === ''){
@@ -142,6 +149,7 @@ export default {
           left: '10px',
           fontSize: this.fontSize + 'px'
         }
+        this.overError()
       }
       this.focusLineStyle = {
         maxWidth: '0%',
@@ -155,7 +163,7 @@ export default {
         this.placeholderStyle = {
           top: '-' + this.fontSize*1.4 + 'px',
           left: '0',
-          fontSize: this.fontSize/2 + 'px'
+          fontSize: this.fontSize*2/3 + 'px'
         }
       }
       this.focusLineStyle = {
@@ -167,6 +175,12 @@ export default {
     click: debounce(()=>{
       // console.log('click')
     }, 1000),
+    shakeOnly(){
+      this.boxAnimation = 'shakeX 1s'
+      setTimeout(() => {
+        this.boxAnimation = ''
+      }, 500)
+    },
     shake(tip){
       this.errorTip = ''
       this.errorTip = tip
@@ -181,6 +195,24 @@ export default {
         this.boxAnimation = ''
       }, 500)
       this.shakeOver(this)
+    },
+    error(tip){
+      this.errorTip = ''
+      this.errorTip = tip
+      this.errorTipShow = true
+      this.errorLineStyle = {
+        maxWidth: '100%',
+        left: '0',      
+        boxShadow: '0 0 5px #f56c6c'
+      }
+    },
+    overError(){
+      this.errorTipShow = false
+      this.errorLineStyle = {
+        maxWidth: '0%',
+        right: '0',      
+        boxShadow: '0 0 5px #f56c6c00'
+      }
     },
     shakeOver: debounce((that) => {
       that.errorTipShow = false
@@ -197,7 +229,7 @@ export default {
       this.placeholderStyle = {
         top: '-' + this.fontSize*1.4 + 'px',
         left: '0',
-        fontSize: this.fontSize/2 + 'px'
+        fontSize: this.fontSize*2/3 + 'px'
       }
     }
     if(this.label && this.label !== ''){

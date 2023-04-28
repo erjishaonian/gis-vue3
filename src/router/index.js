@@ -20,6 +20,11 @@ const routes = [
     name: 'gis',
     component: () => import('../views/gis/Gis.vue'),
   },
+  {
+    path: '/weather',
+    name: 'weather',
+    component: () => import('../views/weather/Weather.vue'),
+  },
   //贰年的组件库
   {
     path: '/ernian',

@@ -160,5 +160,8 @@ export default {
     20% {
         transform: scale(0.95);
     }
+    60% {
+        transform: scale(1.02);
+    }
 }
 </style>

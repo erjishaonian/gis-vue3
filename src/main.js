@@ -24,6 +24,7 @@ const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
   }
-app.config.globalProperties.$axios = axios
+// app.config.globalProperties.$axios = axios
+app.config.globalProperties.$http=axios
 app.config.warnHandler = () => null
 app.use(store).use(hljsVuePlugin).use(router).use(ElementPlus).mount('#app')
