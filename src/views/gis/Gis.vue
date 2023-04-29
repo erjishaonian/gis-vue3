@@ -21,7 +21,6 @@ import 'leaflet-draw'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import weatherBackground from '@/components/weatherBackground.vue'
-import axios from 'axios'
 import http from '@/axios'
 export default {
   components: { weatherBackground },
@@ -94,13 +93,6 @@ export default {
   },
   created(){
     
-    // axios.post('/', {
-    //   data: encodeURI({
-    //     name: 'sss'
-    //   })
-    // }).then(res => {
-    //   console.log(res)
-    // })
     // http.post('/', {name: 'bob'}).then(res => {
     //   console.log(res)
     // })

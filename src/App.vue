@@ -215,6 +215,7 @@ import Button from "@/components/Button.vue";
 import CheckBox from "@/components/CheckBox.vue";
 import LineInput from "@/components/LineInput.vue";
 import { throttle } from "@/assets/untils/untils.js";
+import http from '@/axios'
 
 export default defineComponent({
   name: "App",
@@ -311,12 +312,18 @@ export default defineComponent({
           /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
         if (this.user.email === "") {
           this.$refs.email.shake("请填写邮箱");
+          return
         } else if (!regEmail.test(this.user.email)) {
           this.$refs.email.shakeOnly();
+          return
         }
         if (this.user.password === "") {
           this.$refs.password.shake("请填写密码");
+          return
         }
+        http.post('/', 'user.login', this.user).then(res => {
+          console.log(res)
+        })
       }
       //注册转登录
       else if(this.registerShow === 1) {
@@ -404,18 +411,22 @@ export default defineComponent({
         }
         //发送验证码
         else {
-          //执行动画
-          //固定高度，防止出现高度抖动
-          let emailDiv = document.getElementById("email");
-          let emailH = emailDiv.clientHeight;
-          emailDiv.style.height = emailH + "px";
-          emailDiv.style.maxHeight = emailH + "px";
-          //隐藏邮箱
-          this.show.email = false;
-          //打开验证码
-          this.show.code = true
-          //下一步
-          this.registerShow = 2;
+          http.post('/', 'user.sendCode', {email: this.user.email}).then(res => {
+            //执行动画
+            //固定高度，防止出现高度抖动
+            let emailDiv = document.getElementById("email");
+            let emailH = emailDiv.clientHeight;
+            emailDiv.style.height = emailH + "px";
+            emailDiv.style.maxHeight = emailH + "px";
+            //隐藏邮箱
+            this.show.email = false;
+            //打开验证码
+            this.show.code = true
+            //下一步
+            this.registerShow = 2;
+          }).catch(e => {
+            this.$refs.email.shake("验证码发送失败");
+          })
         }
       }
       //注册最后一步
