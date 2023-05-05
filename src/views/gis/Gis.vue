@@ -31,7 +31,7 @@ export default {
   },
   mounted() {
     // create map instance
-    const map = L.map('map').setView([43.8, 125.2], 10);
+    const map = L.map('map', {attributionControl: false}).setView([43.8, 125.2], 10);
 
     //声明街道地图图层
     var osmLayer = L.tileLayer("http://webrd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=7&x={x}&y={y}&z={z}", {
@@ -43,7 +43,6 @@ export default {
     });
     //新建图层控件的数据源-地图
     var baseLayers = {
-
         '卫星地图': stamenLayer,
         '街道地图': osmLayer
     };
@@ -112,10 +111,22 @@ export default {
     .map-box{
       width: 80vw;
       height: 80vh;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 0 6px 6px rgba($color: #555555, $alpha: .3);
       #map{
         width: 80vw;
         height: 80vh;
       }
    }
+}
+
+</style>
+<style>
+.leaflet-touch .leaflet-control-layers-toggle{
+  cursor: pointer;
+}
+.leaflet-control-layers-list, .leaflet-control-layers label, .leaflet-control-layers input{
+  cursor: pointer;
 }
 </style>

@@ -180,7 +180,7 @@ export default {
         position: absolute;
         width: 100%;
         height: 100%;
-        z-index: -1;
+        // z-index: 1;
         overflow: hidden;
         transition: transform 0.3s;
         background-color: #000000;
@@ -200,6 +200,7 @@ export default {
         color: #eeeeee;
         font-family: '黑体', Courier, monospace;
         text-align: center;
+        z-index: 2;
         .text-title{
           font-size: 40px;
           font-weight: bolder;

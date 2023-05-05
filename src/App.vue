@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-main">
     <div
       class="top"
       :style="{
@@ -519,6 +519,9 @@ export default defineComponent({
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+}
+.app-main{
+  background: #333;
 }
 .top {
   height: 90px;

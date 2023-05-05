@@ -75,6 +75,12 @@ export default {
   watch: {
     show(oldV, newV) {
       this.mShow = newV;
+      if(!newV){
+        document.getElementsByTagName('html')[0].style.overflow = 'hidden'
+      }
+      else{
+        document.getElementsByTagName('html')[0].style.overflow = 'auto'
+      }
       // console.log(newV)
     },
   },

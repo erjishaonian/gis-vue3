@@ -132,7 +132,7 @@ export default {
   @return $random_range;
 }
 .thunder-weather-main{
-  z-index: 2;
+  // z-index: 2;
   width: 100%;
   height: 100%;
   background: rgba(228, 228, 228, 0.8);
@@ -634,7 +634,8 @@ export default {
     position: fixed;
     width: 100%;
     height: 100%;
-    z-index: -10;
+    /* z-index: -10; */
+    pointer-events: none;
 }
 .weather-background-main{
     width: 100%;
