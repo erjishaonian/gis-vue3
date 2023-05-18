@@ -109,7 +109,7 @@ export default {
             this.mainBackground = ''
         }
     },
-    emits:["update:modelValue", "update:change"],
+    emits:["update:modelValue", "change"],
     computed:{
         value:{
             // 如果正常访问,返回给this.modelValue
@@ -119,7 +119,7 @@ export default {
             set(newV){
                 // 通过触发自定义事件的形式让父组件帮我们更新他的数据，以达到双向绑定效果
                 this.$emit("update:modelValue",newV)
-                this.$emit("update:change",newV)
+                this.$emit("change",newV)
             }
         },
     }

@@ -9,6 +9,13 @@ var cryptoObj = {
         return encrypted.toString();
 
     },
+    /* 解密 */
+    decryptFunc: (message) => {
+        var key = '944802089';//前后端约定好的秘钥
+        var encrypted = CryptoJS.AES.decrypt(message, key);
+        return encrypted.toString(CryptoJS.enc.Utf8);
+
+    },
 }
 
 export default cryptoObj;

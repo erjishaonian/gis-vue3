@@ -12,7 +12,7 @@
       <div class="title" @click="this.$router.push('index')">
         {{ topMenu.title }}
       </div>
-      <div style="flex: 0.3"></div>
+      <div style="flex: 1"></div>
       <div
         v-for="(item, i) in topMenu.list"
         :key="i"
@@ -21,13 +21,14 @@
       >
         {{ item.name }}
       </div>
-      <div style="flex: 1"></div>
+      <div style="flex: 0.5"></div>
       <div
         v-show="topMenu.loginShow"
         class="login button-bottom-line"
         @click="loginModalOpen"
+        :title="isLogin ? '个人中心' : '登录'"
       >
-        登录
+        {{ isLogin ? userInfo.username : "登录" }}
       </div>
     </div>
     <router-view v-slot="{ Component, route }" style="min-width: 900px">
@@ -78,7 +79,7 @@
                   @change="codeChange"
                   type="password"
                   ref="code"
-                  ></LineInput>
+                ></LineInput>
               </div>
             </transition>
           </div>
@@ -108,7 +109,7 @@
                   :placeholder="'密码'"
                   v-model="repass.password0"
                   type="password"
-                  ref="password-0"
+                  ref="password0"
                   ><Lock
                 /></LineInput>
               </div>
@@ -124,7 +125,7 @@
                   :placeholder="'确认密码'"
                   v-model="repass.password1"
                   type="password"
-                  ref="password-1"
+                  ref="password1"
                   ><Lock
                 /></LineInput>
               </div>
@@ -138,6 +139,14 @@
                 <CheckBox
                   v-model="remember"
                   :label="'记住我'"
+                  :color="'#555555'"
+                ></CheckBox>
+              </div>
+              <div class="empty"></div>
+              <div class="container">
+                <CheckBox
+                  v-model="alwaysLogin"
+                  :label="'保持登录'"
                   :color="'#555555'"
                 ></CheckBox>
               </div>
@@ -215,7 +224,7 @@ import Button from "@/components/Button.vue";
 import CheckBox from "@/components/CheckBox.vue";
 import LineInput from "@/components/LineInput.vue";
 import { throttle } from "@/assets/untils/untils.js";
-import http from '@/axios'
+import http from "@/axios";
 
 export default defineComponent({
   name: "App",
@@ -230,21 +239,30 @@ export default defineComponent({
       transitionName: "page",
       loginShow: false,
       registerShow: 0,
-      remember: false,
+      //记住我
+      remember: true,
+      //保持登录
+      alwaysLogin: true,
+      //form
       user: {
         email: "",
         password: "",
       },
+      userInfo: {},
+      //form
       repass: {
         code: "",
         password0: "",
-        password1: ""
+        password1: "",
       },
+      //顶部栏样式
       topStyle: {
         color: null,
         background: null,
       },
+      //顶部栏是否置顶
       isTop: false,
+      //登录弹窗
       show: {
         email: true,
         password: true,
@@ -252,8 +270,10 @@ export default defineComponent({
         registerButton: true,
         code: false,
         password0: false,
-        password1: false
+        password1: false,
       },
+      //是否已经登录
+      isLogin: false,
       topMenu: {
         title: "智慧农业",
         url: "/index",
@@ -270,10 +290,6 @@ export default defineComponent({
             name: "专家指导",
             url: "/index",
           },
-          {
-            name: "OA审批",
-            url: "/index",
-          },
         ],
         loginShow: true,
       },
@@ -282,7 +298,32 @@ export default defineComponent({
   created() {
     // 监听路由变化，更新transitionName
     router.afterEach((to, from) => {
-      // console.log(to)
+      // console.log(to);
+      if (to.path === "/index") {
+        let user = JSON.parse(localStorage.getItem("user"));
+        if (user === null) {
+          this.isLogin = false;
+          this.topMenu = {
+            title: "智慧农业",
+            url: "/index",
+            list: [
+              {
+                name: "地图展示",
+                url: "/gis",
+              },
+              {
+                name: "气象预警",
+                url: "/weather",
+              },
+              {
+                name: "专家指导",
+                url: "/index",
+              },
+            ],
+            loginShow: true,
+          };
+        }
+      }
       if (to.meta && to.meta.topMenu) {
         this.topMenu = to.meta.topMenu;
       }
@@ -295,6 +336,25 @@ export default defineComponent({
         };
       this.topTrandorm();
     });
+    //自动登录
+    if (!this.isLogin && localStorage.getItem("alwaysLogin") === "true") {
+      let user = JSON.parse(localStorage.getItem("user"));
+      http.post("/", "user.login", user).then((res) => {
+        // console.log(res)
+
+        if (res.status === 200) {
+          this.userInfo = res.data;
+          this.isLogin = true;
+          // this.$message.success("自动登录成功！");
+          if (this.userInfo.role === "管理员") {
+            this.topMenu.list.push({
+              name: "OA审批",
+              url: "/oa",
+            });
+          }
+        }
+      });
+    }
   },
   mounted() {
     // this.topTrandorm()
@@ -312,21 +372,43 @@ export default defineComponent({
           /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
         if (this.user.email === "") {
           this.$refs.email.shake("请填写邮箱");
-          return
+          return;
         } else if (!regEmail.test(this.user.email)) {
           this.$refs.email.shakeOnly();
-          return
+          return;
         }
         if (this.user.password === "") {
           this.$refs.password.shake("请填写密码");
-          return
+          return;
         }
-        http.post('/', 'user.login', this.user).then(res => {
-          console.log(res)
-        })
+        //记住我
+        if (this.remember) {
+          console.log("存储用户信息");
+          localStorage.setItem("user", JSON.stringify(this.user));
+        }
+        http.post("/", "user.login", this.user).then((res) => {
+          if (res.status === 200) {
+            this.userInfo = res.data;
+            this.isLogin = true;
+            this.loginShow = false;
+            localStorage.setItem("alwaysLogin", this.alwaysLogin);
+            this.$message.success("登录成功！");
+            if (this.userInfo.role === "管理员") {
+              this.topMenu.list.push({
+                name: "OA审批",
+                url: "/oa",
+              });
+            }
+          } else if (res.status === 501) {
+            this.$refs.password.shake(res.msg);
+          } else if (res.status === 502) {
+            this.$refs.email.shake(res.msg);
+            return;
+          }
+        });
       }
       //注册转登录
-      else if(this.registerShow === 1) {
+      else if (this.registerShow === 1) {
         //设置高度
         let passwordDiv = document.getElementById("password");
         let passwordH = passwordDiv.style.height;
@@ -346,26 +428,31 @@ export default defineComponent({
         this.registerShow = 0;
       }
       //验证码上一步
-      else if(this.registerShow === 2) {
-        this.show.code = false
-        this.show.email = true
+      else if (this.registerShow === 2) {
+        this.show.code = false;
+        this.show.email = true;
         //打开密码和check区
         this.registerShow = 1;
       }
       //注册密码上一步
-      else if(this.registerShow === 3) {
-        this.show.code = true
+      else if (this.registerShow === 3) {
+        this.show.code = true;
         //设置高度
         let password0Div = document.getElementById("password-0");
         let password1Div = document.getElementById("password-1");
-        password0Div.style.maxHeight = '0'
-        password1Div.style.maxHeight = '0'
+        password0Div.style.maxHeight = "0";
+        password1Div.style.maxHeight = "0";
+        let checkDiv = document.getElementById("check");
+        checkDiv.style.maxHeight = "0";
         setTimeout(() => {
           this.show.password0 = false;
         }, 200);
-        setTimeout(()=>{
+        setTimeout(() => {
           this.show.password1 = false;
-        }, 250)
+        }, 250);
+        setTimeout(() => {
+          this.show.check = false;
+        }, 300);
         //打开密码和check区
         this.registerShow = 2;
       }
@@ -380,7 +467,7 @@ export default defineComponent({
         passwordDiv.style.maxHeight = passwordH + "px";
         let checkDiv = document.getElementById("check");
         let checkH = checkDiv.clientHeight;
-        checkDiv.style.height = checkH + "px";
+        // checkDiv.style.height = checkH + "px";
         checkDiv.style.maxHeight = checkH + "px";
         //隐藏密码和check区
         this.show.password = false;
@@ -411,40 +498,91 @@ export default defineComponent({
         }
         //发送验证码
         else {
-          http.post('/', 'user.sendCode', {email: this.user.email}).then(res => {
-            //执行动画
-            //固定高度，防止出现高度抖动
-            let emailDiv = document.getElementById("email");
-            let emailH = emailDiv.clientHeight;
-            emailDiv.style.height = emailH + "px";
-            emailDiv.style.maxHeight = emailH + "px";
-            //隐藏邮箱
-            this.show.email = false;
-            //打开验证码
-            this.show.code = true
-            //下一步
-            this.registerShow = 2;
-          }).catch(e => {
-            this.$refs.email.shake("验证码发送失败");
-          })
+          http
+            .post("/", "user.sendCode", { email: this.user.email })
+            .then((res) => {
+              if (res.status !== 200) {
+                this.$refs.email.shake(res.msg);
+                return;
+              }
+              this.$message.success("发送成功！");
+              //执行动画
+              //固定高度，防止出现高度抖动
+              let emailDiv = document.getElementById("email");
+              let emailH = emailDiv.clientHeight;
+              emailDiv.style.height = emailH + "px";
+              emailDiv.style.maxHeight = emailH + "px";
+              //隐藏邮箱
+              this.show.email = false;
+              //打开验证码
+              this.show.code = true;
+              //下一步
+              this.registerShow = 2;
+            })
+            .catch((e) => {
+              this.$refs.email.shake("验证码发送失败");
+            });
         }
       }
       //注册最后一步
       else if (this.registerShow === 2) {
-        //设置高度
-        let password0Div = document.getElementById("password-0");
-        let password1Div = document.getElementById("password-1");
-        password0Div.style.maxHeight = '100px'
-        password1Div.style.maxHeight = '100px'
-        this.show.code = false
-        //打开密码和check区
-        setTimeout(() => {
-          this.show.password0 = true;
-        }, 150);
-        setTimeout(() => {
-          this.show.password1 = true;
-        }, 350);
-        this.registerShow = 3;
+        const codeInfo = {
+          email: this.user.email,
+          code: this.repass.code,
+        };
+        http.post("/", "user.code", codeInfo).then((res) => {
+          if (res.status !== 200) {
+            this.$refs.code.shake(res.msg);
+            return;
+          }
+          //设置高度
+          let password0Div = document.getElementById("password-0");
+          let password1Div = document.getElementById("password-1");
+          password0Div.style.maxHeight = "70px";
+          password1Div.style.maxHeight = "75px";
+          password0Div.style.height = "70px";
+          password1Div.style.height = "75px";
+          let checkDiv = document.getElementById("check");
+          checkDiv.style.maxHeight = "100px";
+          checkDiv.style.height = "73px";
+          this.show.code = false;
+          //打开密码和check区
+          setTimeout(() => {
+            this.show.password0 = true;
+          }, 350);
+          setTimeout(() => {
+            this.show.password1 = true;
+          }, 450);
+          setTimeout(() => {
+            this.show.check = true;
+          }, 550);
+          this.registerShow = 3;
+        });
+      } else if (this.registerShow === 3) {
+        const registerInfo = {
+          email: this.user.email,
+          password: this.repass.password0,
+        };
+        if (this.repass.password0 !== this.repass.password1) {
+          this.$refs.password0.shake("");
+          this.$refs.password.shake("两次输入不一致");
+          return;
+        }
+        http.post("/", "user.registerPassword", registerInfo).then((res) => {
+          if (res.status !== 200) {
+            this.$refs.code.shake(res.msg);
+            return;
+          }
+          this.user.password = this.repass.password1;
+          //记住我
+          if (this.remember) {
+            console.log("存储用户信息");
+            localStorage.setItem("user", JSON.stringify(this.user));
+          }
+          this.isLogin = true;
+          this.$message.success("注册成功并登录");
+          this.loginShow = false;
+        });
       }
     },
     //监听用户输入邮箱时间
@@ -459,13 +597,26 @@ export default defineComponent({
       }
     },
     codeChange(e) {
-      if(String(e).length === 6)
-      {
-        this.register()
+      if (String(e).length === 6) {
+        this.register();
       }
     },
     //打开登陆弹窗
     loginModalOpen() {
+      if (this.isLogin) {
+        this.$router.push("user");
+        return;
+      }
+      //记住我？
+      let user = JSON.parse(localStorage.getItem("user"));
+      let alwaysLogin = localStorage.getItem("alwaysLogin");
+      if (user) {
+        this.user = user;
+        this.remember = true;
+      }
+      if (alwaysLogin) {
+        this.alwaysLogin = localStorage.getItem("alwaysLogin");
+      }
       this.registerShow = 0;
       this.loginShow = true;
       this.show = {
@@ -475,8 +626,8 @@ export default defineComponent({
         registerButton: true,
         code: false,
         password0: false,
-        password1: false
-      }
+        password1: false,
+      };
     },
     //关闭登录弹窗
     loginClose() {
@@ -520,7 +671,7 @@ export default defineComponent({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 }
-.app-main{
+.app-main {
   background: #333;
 }
 .top {
@@ -590,24 +741,35 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     min-height: 95px;
-    .password{
+    .password {
       margin-top: 30px;
     }
-    .code{
+    .code {
       position: absolute;
       width: 60%;
     }
-    .password-1, .password-2{
-      height: 100px;
+    .password-1 {
+      height: 70px;
       max-height: 0;
     }
-    .password-1-box{
-      margin-top: 30px;
+    .password-2 {
+      height: 75px;
+      max-height: 0;
+    }
+    .password-1-box {
+      margin-top: 10px;
     }
   }
   .check {
     margin-top: 40px;
     width: 60%;
+    .check-box {
+      display: flex;
+      .empty {
+        flex: 1;
+        height: auto !important;
+      }
+    }
     .container {
       width: fit-content;
     }
@@ -638,6 +800,25 @@ export default defineComponent({
 * {
   margin: 0;
   padding: 0;
+}
+</style>
+<style>
+.el-message--success {
+  background: #529b2e88 !important;
+}
+.el-message--error {
+  background: #c4565688 !important;
+}
+.el-message {
+  backdrop-filter: blur(2px);
+  border-radius: 0 !important;
+  /* padding: 10px 20px !important; */
+}
+.el-message .el-icon {
+  color: #fff !important;
+}
+.el-message .el-message__content {
+  color: #fff !important;
 }
 </style>
 <style>

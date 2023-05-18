@@ -21,6 +21,16 @@
             <div class="wu" v-for="i in 6" :key="i"></div>
           </div>
         </div>
+        <div v-if="type==='多云'" class="duoyun-weather-background weather-background-main">
+          <div class="duoyun-main">
+            <div class="duoyun" v-for="i in 6" :key="i"></div>
+          </div>
+        </div>
+        <div v-if="type==='阴'" class="yin-weather-background weather-background-main">
+          <div class="yin-main">
+            <div class="yin" v-for="i in 6" :key="i"></div>
+          </div>
+        </div>
         <div v-if="type==='霾'" class="mai-weather-background weather-background-main">
           <div class="mai-main">
             <div class="mai" v-for="i in 6" :key="i"></div>
@@ -439,6 +449,110 @@ export default {
   top: 50%;
   left: 60%;
   box-shadow: 0 0 100px 100px rgb(161, 161, 161);
+}
+</style>
+<style lang="scss" scoped>
+.duoyun-weather-background{
+  background-color: rgb(60, 127, 205);
+  position: relative;
+}
+.duoyun-main{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  animation: changeright 80s linear infinite;
+}
+.duoyun{
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+@keyframes changeright{       
+  0%{-webkit-transform:rotate(0deg);}
+  50%{-webkit-transform:rotate(180deg);}
+  100%{-webkit-transform:rotate(360deg);}
+}
+.duoyun:nth-child(1){
+  top: 60%;
+  left: 10%;
+  box-shadow: 0 0 300px 300px rgba(250, 250, 250, 0.7);
+}
+.duoyun:nth-child(2){
+  top: 20%;
+  left: 50%;
+  box-shadow: 0 0 300px 300px rgba(207, 207, 207, 0.7)
+}
+.duoyun:nth-child(3){
+  top: 20%;
+  left: 90%;
+  box-shadow: 0 0 200px 200px rgba(196, 196, 196, 0.7)
+}
+.duoyun:nth-child(4){
+  top: 70%;
+  left: 35%;
+  box-shadow: 0 0 140px 140px rgba(207, 207, 207, 0.7)
+}
+.duoyun:nth-child(5){
+  top: 70%;
+  left: 70%;
+  box-shadow: 0 0 160px 160px rgba(236, 236, 236, 0.7)
+}
+.duoyun:nth-child(6){
+  top: 50%;
+  left: 60%;
+  box-shadow: 0 0 100px 100px rgba(219, 219, 219, 0.7)
+}
+</style>
+<style lang="scss" scoped>
+.yin-weather-background{
+  background-color: rgb(60, 127, 205);
+  position: relative;
+}
+.yin-main{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  animation: changeright 80s linear infinite;
+}
+.yin{
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+@keyframes changeright{       
+  0%{-webkit-transform:rotate(0deg);}
+  50%{-webkit-transform:rotate(180deg);}
+  100%{-webkit-transform:rotate(360deg);}
+}
+.yin:nth-child(1){
+  top: 60%;
+  left: 30%;
+  box-shadow: 0 0 700px 700px rgba(151, 151, 151, 0.7);
+}
+.yin:nth-child(2){
+  top: 40%;
+  left: 30%;
+  box-shadow: 0 0 400px 400px rgba(153, 153, 153, 0.7)
+}
+.yin:nth-child(3){
+  top: 20%;
+  left: 90%;
+  box-shadow: 0 0 400px 300px rgba(133, 133, 133, 0.7)
+}
+.yin:nth-child(4){
+  top: 70%;
+  left: 35%;
+  box-shadow: 0 0 240px 240px rgba(114, 114, 114, 0.7)
+}
+.yin:nth-child(5){
+  top: 70%;
+  left: 70%;
+  box-shadow: 0 0 260px 260px rgba(146, 146, 146, 0.7)
+}
+.yin:nth-child(6){
+  top: 50%;
+  left: 60%;
+  box-shadow: 0 0 200px 200px rgba(148, 148, 148, 0.7)
 }
 </style>
 <style lang="scss" scoped>

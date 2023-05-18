@@ -26,6 +26,7 @@ axios.interceptors.response.use(
 	response => {
 		// 如果返回的状态码为200，说明接口请求成功，可以正常拿到数据
 		// 否则的话抛出错误
+		
 		if (response.status === 200) {
 			return Promise.resolve(response);
 		} else {
@@ -118,7 +119,9 @@ export function post(url, method, data = {}) {
 		param = JSON.stringify(param)
 		
 		axios.post(url, {data: cryptoObj.encryptFunc(param)}).then(res => {
-			// Toast.close();
+			// console.log(res)
+			res.data = JSON.parse(cryptoObj.decryptFunc(res.data))
+			
 			if(res.data.code == -2000){
 				// Toast.fail(res.data.message);
 				localStorage.clear();

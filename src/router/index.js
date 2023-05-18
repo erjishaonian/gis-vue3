@@ -21,9 +21,19 @@ const routes = [
     component: () => import('../views/gis/Gis.vue'),
   },
   {
+    path: '/gisadd',
+    name: 'gisadd',
+    component: () => import('../views/gis/GisAdd.vue'),
+  },
+  {
     path: '/weather',
     name: 'weather',
     component: () => import('../views/weather/Weather.vue'),
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: () => import('../views/user/Index.vue'),
   },
   //贰年的组件库
   {

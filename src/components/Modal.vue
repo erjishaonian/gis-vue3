@@ -109,7 +109,7 @@ export default {
   right: 0;
   bottom: 0;
   height: 100%;
-  z-index: 1099;
+  z-index: 100099;
   width: 100%;
   background-color: rgba($color: #000000, $alpha: 0.5);
   backdrop-filter: blur(4px);
@@ -123,13 +123,13 @@ export default {
   height: 100%;
   width: 100%;
   overflow: hidden;
-  z-index: 1100;
+  z-index: 100100;
 }
 .main {
   background-color: rgba(255, 255, 255, 0.62);
   // height: 600px;
   min-height: 200px;
-  z-index: 99999;
+  z-index: 9999999;
   width: 900px;
   position: fixed;
   top: 50%;
