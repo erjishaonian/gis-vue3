@@ -31,9 +31,19 @@ const routes = [
     component: () => import('../views/weather/Weather.vue'),
   },
   {
+    path: '/expert',
+    name: 'expert',
+    component: () => import('../views/expert/Index.vue'),
+  },
+  {
     path: '/user',
     name: 'user',
     component: () => import('../views/user/Index.vue'),
+  },
+  {
+    path: '/oa',
+    name: 'oa',
+    component: () => import('../views/oa/Index.vue'),
   },
   //贰年的组件库
   {

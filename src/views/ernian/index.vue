@@ -79,6 +79,7 @@ h3{
     margin-top: 90px;
     display: flex;
     justify-content: center;
+    background: #fff;
 }
 .content{
     display: flex;

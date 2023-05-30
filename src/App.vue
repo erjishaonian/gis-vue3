@@ -1,5 +1,6 @@
 <template>
   <div class="app-main">
+    <Chat ref="chat"></Chat>
     <div
       class="top"
       :style="{
@@ -31,7 +32,7 @@
         {{ isLogin ? userInfo.username : "登录" }}
       </div>
     </div>
-    <router-view v-slot="{ Component, route }" style="min-width: 900px">
+    <router-view v-slot="{ Component, route }" style="min-width: 900px" @chat="chat">
       <transition :name="transitionName" mode="out-in">
         <component :is="Component" :key="route.fullPath" />
       </transition>
@@ -223,6 +224,7 @@ import Modal from "@/components/Modal.vue";
 import Button from "@/components/Button.vue";
 import CheckBox from "@/components/CheckBox.vue";
 import LineInput from "@/components/LineInput.vue";
+import Chat from "@/components/Chat.vue";
 import { throttle } from "@/assets/untils/untils.js";
 import http from "@/axios";
 
@@ -233,6 +235,7 @@ export default defineComponent({
     LineInput,
     Button,
     CheckBox,
+    Chat
   },
   data() {
     return {
@@ -279,6 +282,10 @@ export default defineComponent({
         url: "/index",
         list: [
           {
+            name: "首页",
+            url: "/index",
+          },
+          {
             name: "地图展示",
             url: "/gis",
           },
@@ -288,7 +295,7 @@ export default defineComponent({
           },
           {
             name: "专家指导",
-            url: "/index",
+            url: "/expert",
           },
         ],
         loginShow: true,
@@ -307,6 +314,10 @@ export default defineComponent({
             title: "智慧农业",
             url: "/index",
             list: [
+              {
+                name: "首页",
+                url: "/index",
+              },
               {
                 name: "地图展示",
                 url: "/gis",
@@ -337,6 +348,7 @@ export default defineComponent({
       this.topTrandorm();
     });
     //自动登录
+    
     if (!this.isLogin && localStorage.getItem("alwaysLogin") === "true") {
       let user = JSON.parse(localStorage.getItem("user"));
       http.post("/", "user.login", user).then((res) => {
@@ -352,6 +364,7 @@ export default defineComponent({
               url: "/oa",
             });
           }
+          this.$refs.chat.load()
         }
       });
     }
@@ -365,6 +378,10 @@ export default defineComponent({
     window.removeEventListener("scroll");
   },
   methods: {
+    chat(email){
+      // console.log('chat' + email)
+      this.$refs.chat.createChat(email)
+    },
     login() {
       //登录
       if (this.registerShow === 0) {
@@ -391,7 +408,8 @@ export default defineComponent({
             this.userInfo = res.data;
             this.isLogin = true;
             this.loginShow = false;
-            localStorage.setItem("alwaysLogin", this.alwaysLogin);
+            localStorage.setItem("alwaysLogin", this.alwaysLogin? 'true':'null');
+            localStorage.setItem("user-info", JSON.stringify(this.user));
             this.$message.success("登录成功！");
             if (this.userInfo.role === "管理员") {
               this.topMenu.list.push({
@@ -399,6 +417,8 @@ export default defineComponent({
                 url: "/oa",
               });
             }
+            
+            this.$refs.chat.load()
           } else if (res.status === 501) {
             this.$refs.password.shake(res.msg);
           } else if (res.status === 502) {
@@ -580,6 +600,7 @@ export default defineComponent({
             localStorage.setItem("user", JSON.stringify(this.user));
           }
           this.isLogin = true;
+          localStorage.setItem("user-info", JSON.stringify(this.user));
           this.$message.success("注册成功并登录");
           this.loginShow = false;
         });
@@ -805,13 +826,16 @@ export default defineComponent({
 <style>
 .el-message--success {
   background: #529b2e88 !important;
+  z-index: 9999999999 !important;
 }
 .el-message--error {
   background: #c4565688 !important;
+  z-index: 9999999999 !important;
 }
 .el-message {
   backdrop-filter: blur(2px);
   border-radius: 0 !important;
+  z-index: 9999999999 !important;
   /* padding: 10px 20px !important; */
 }
 .el-message .el-icon {

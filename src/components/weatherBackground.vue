@@ -704,7 +704,7 @@ export default {
         left: 75%;
         width: 0;
         height: 0;
-        box-shadow: 0 0 100px 100px rgba($color: #ffffff, $alpha: 1);
+        box-shadow: 0 0 100px 100px rgba($color: #fdf6b3, $alpha: 1);
         animation: sun-box-shadow 4s infinite ease-in-out alternate,
             sun-xy 7s infinite ease-in-out alternate;
     }
@@ -724,20 +724,20 @@ export default {
     }
     @keyframes sun-box-shadow {
         0%{
-            box-shadow: 0 0 100px 100px rgba($color: #ffffff, $alpha: 1);
+            box-shadow: 0 0 100px 100px rgba($color: #fffbd3, $alpha: 1);
         }
         100%{
-            box-shadow: 0 0 140px 140px rgba($color: #ffffff, $alpha: 1);
+            box-shadow: 0 0 140px 140px rgba($color: #f8f7ee, $alpha: 1);
         }
     }
     @keyframes sun-xy {
         0%{
-            top: 24%;
-            left: 75%;
+            top: 14%;
+            left: 80%;
         }
         100%{
-            top: 29%;
-            left: 83%;
+            top: 19%;
+            left: 90%;
         }
     }
 }

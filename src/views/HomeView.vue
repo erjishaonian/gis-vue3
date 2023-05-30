@@ -21,13 +21,7 @@ export default {
     HelloWorld, Modal
   },
   created () {
-    this.$axios.get('/posts')
-      .then(response => {
-        this.posts = response.data
-      })
-      .catch(error => {
-        console.log(error)
-      })
+  
   }
 }
 </script>
@@ -56,5 +50,9 @@ export default {
 }
 .quotation-mark:hover{
 clip-path: none;
+}
+.home{
+  margin-top: 100px;
+  background: #fff;
 }
 </style>

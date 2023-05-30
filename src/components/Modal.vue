@@ -6,7 +6,7 @@
     <Transition name="fi">
       <div v-if="show" class="m" @click="close">
         <div
-          class="main"
+          class="modal-main"
           id="modal-main"
           @click.stop=""
           :style="
@@ -125,7 +125,7 @@ export default {
   overflow: hidden;
   z-index: 100100;
 }
-.main {
+.modal-main {
   background-color: rgba(255, 255, 255, 0.62);
   // height: 600px;
   min-height: 200px;

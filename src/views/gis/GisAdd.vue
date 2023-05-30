@@ -125,6 +125,23 @@ export default {
     };
   },
   methods: {
+    getFarm() {
+      http.post("/", "farm.getZC", this.citySelectValue).then((res) => {
+        let data = res.data;
+        console.log(data);
+        for (let i = 0; i < data.length; i++) {
+          let dom = this.addGeoJsonToMap(
+            data[i].geojson,
+            {
+              color: data[i].color,
+              weight: parseFloat(data[i].weight),
+              opacity: parseFloat(data[i].opacity),
+              fillColor: data[i].fill_color,
+              fillOpacity: parseFloat(data[i].fill_opacity),
+            });
+        }
+      });
+    },
     submitClick() {
       if (this.farm.name === "") {
         this.$refs.name.shake("请填写农田名称");
@@ -152,6 +169,7 @@ export default {
         .then((res) => {
           if (res.status === 200) {
             this.$message.success("提交成功！");
+            this.$router.push({ path: "/user" });
           } else {
             throw new Error();
           }
@@ -313,7 +331,7 @@ export default {
     },
     mapTo(point) {
       // console.log(point)
-      this.map.setView(point.reverse(), 11);
+      this.map.setView([point[1], point[0]], 11);
     },
     addGeoJsonToMap(
       json,
@@ -343,6 +361,7 @@ export default {
       // console.log(e);
       this.citySelectValue = e;
       this.getGeojson(e);
+      this.getFarm()
     },
     formatArea(polygon) {
       //L.GeometryUtil.geodesicArea(),返回number类型的数据，单位是平方米，这里做了一下转化
@@ -504,6 +523,7 @@ export default {
     });
 
     this.getGeojson(this.citySelectValue);
+    this.getFarm()
   },
   created() {
     if (!JSON.parse(localStorage.getItem("user"))) {

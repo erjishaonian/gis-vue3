@@ -40,10 +40,10 @@ export default {
   },
   data () {
     return {
-      indexTitle: '农业GIS及综合预警服务平台',
+      indexTitle: '农业gis及综合预警服务平台',
       decsList:[
         {
-          title: '「GIS地图」',
+          title: '「gis地图」',
           decs: '提供即时农田地图，助力精准农业生产',
           img: require('@/assets/img/gis.jpeg')
         },
